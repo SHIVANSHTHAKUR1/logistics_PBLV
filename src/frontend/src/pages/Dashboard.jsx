@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import {
   Box,
   Typography,
@@ -44,10 +46,19 @@ import {
   Analytics as AnalyticsIcon,
   Assignment as AssignmentIcon,
 } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardStats, fetchRecentActivities } from '../store/slices/dashboardSlice';
 import { fetchTrips } from '../store/slices/tripsSlice';
 import { fetchDrivers } from '../store/slices/driversSlice';
+
+// Memoized selector to prevent unnecessary rerenders
+const selectDashboardData = createSelector(
+  [(state) => state.trips?.list, (state) => state.drivers?.list, (state) => state.analytics],
+  (trips, drivers, analytics) => ({
+    trips: trips || [],
+    drivers: drivers || [],
+    analytics: analytics || {},
+  })
+);
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -57,11 +68,8 @@ function Dashboard() {
     dispatch(fetchTrips());
     dispatch(fetchDrivers());
   }, [dispatch]);
-  const { trips, drivers, analytics } = useSelector((state) => ({
-    trips: state.trips?.list || [],
-    drivers: state.drivers?.list || [],
-    analytics: state.analytics || {},
-  }));
+  
+  const { trips, drivers, analytics } = useSelector(selectDashboardData);
 
   const [realTimeData, setRealTimeData] = useState({
     totalTrips: 1247,

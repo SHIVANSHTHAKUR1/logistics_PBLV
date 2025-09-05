@@ -20,41 +20,56 @@ const NotificationSystem = () => {
   const [ws, setWs] = useState(null);
 
   useEffect(() => {
-    // Initialize WebSocket connection
-    const websocket = new WebSocket('ws://localhost:8000/ws');
+    // TODO: Initialize WebSocket connection when backend WebSocket endpoint is ready
+    // const websocket = new WebSocket('ws://localhost:8000/ws');
     
-    websocket.onopen = () => {
-      console.log('Notification WebSocket connected');
-      setWs(websocket);
+    // websocket.onopen = () => {
+    //   console.log('Notification WebSocket connected');
+    //   setWs(websocket);
+    // };
+    
+    // For now, simulate some notifications for testing
+    const simulateNotifications = () => {
+      const sampleNotifications = [
+        { id: 1, type: 'info', message: 'System connected successfully' },
+        { id: 2, type: 'success', message: 'Data loaded from backend' }
+      ];
+      
+      sampleNotifications.forEach((notification, index) => {
+        setTimeout(() => {
+          addNotification(notification.type, notification.message);
+        }, (index + 1) * 2000);
+      });
     };
     
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      handleRealTimeNotification(data);
-    };
+    simulateNotifications();
     
-    websocket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
+    // websocket.onmessage = (event) => {
+    //   const data = JSON.parse(event.data);
+    //   handleRealTimeNotification(data);
+    // };
     
-    websocket.onclose = () => {
-      console.log('WebSocket disconnected');
-      setWs(null);
-      // Attempt to reconnect after 5 seconds
-      setTimeout(initializeWebSocket, 5000);
-    };
+    // websocket.onerror = (error) => {
+    //   console.error('WebSocket error:', error);
+    // };
+    
+    // websocket.onclose = () => {
+    //   console.log('WebSocket disconnected');
+    //   setWs(null);
+    //   // Attempt to reconnect after 5 seconds
+    //   setTimeout(initializeWebSocket, 5000);
+    // };
 
-    const initializeWebSocket = () => {
-      if (!ws) {
-        const newWs = new WebSocket('ws://localhost:8000/ws');
-        setWs(newWs);
-      }
-    };
+    // const initializeWebSocket = () => {
+    //   if (!ws) {
+    //     const newWs = new WebSocket('ws://localhost:8000/ws');
+    //     setWs(newWs);
+    //   }
+    // };
 
     return () => {
-      if (websocket) {
-        websocket.close();
-      }
+      // Cleanup function
+      console.log('NotificationSystem cleanup');
     };
   }, []);
 
