@@ -1,0 +1,11 @@
+load_id,trip_id,cargo_description,weight_tons,volume_cubic_meters,value_inr,packaging_type,special_requirements,loading_time,unloading_time,handling_instructions
+L001,T001,Samsung Electronics - LED TVs,8.5,45.2,850000,Wooden Crates,Fragile - Handle with care,2025-01-15 08:00:00,2025-01-17 14:00:00,Use forklift only
+L002,T002,Cotton Textiles - Fabric Rolls,12.0,65.8,600000,Plastic Wrapping,Keep dry,2025-01-16 06:00:00,2025-01-16 18:00:00,Manual unloading allowed
+L003,T003,Industrial Chemicals - Paint,18.5,82.4,1200000,Steel Drums,Hazardous material,2025-01-18 09:00:00,2025-01-19 11:00:00,Certified handlers only
+L004,T004,Wooden Furniture - Office Desks,10.0,55.6,400000,Cardboard Boxes,Avoid moisture,2025-01-20 07:00:00,2025-01-20 16:00:00,Stack carefully
+L005,T005,Handicrafts - Decorative Items,6.5,35.2,350000,Bubble Wrap,Extremely fragile,2025-01-21 10:00:00,2025-01-22 12:00:00,Individual piece handling
+L006,T006,Pharmaceutical Products - Medicines,15.0,42.8,2000000,Temperature Controlled,Maintain 2-8°C,2025-01-22 05:00:00,2025-01-23 09:00:00,Cold chain required
+L007,T007,Automotive Parts - Engine Components,14.5,38.4,900000,Metal Crates,Heavy items,2025-01-19 08:30:00,2025-01-19 17:30:00,Crane required for unloading
+L008,T008,Agricultural Products - Organic Rice,9.0,48.6,200000,Jute Bags,Keep dry and ventilated,2025-01-17 06:00:00,2025-01-17 15:00:00,Manual handling OK
+L009,T009,Food Grains - Wheat,8.0,44.2,150000,Gunny Bags,Pest control required,2025-01-23 07:00:00,2025-01-24 13:00:00,Check for moisture
+L010,T010,Consumer Goods - Household Items,7.5,40.8,500000,Mixed Packaging,Standard handling,2025-01-25 09:00:00,2025-01-25 18:00:00,Sort by category during unloading

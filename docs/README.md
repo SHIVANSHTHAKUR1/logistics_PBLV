@@ -6,7 +6,7 @@ This directory contains all project documentation.
 - `project-plan.md` - Project planning and timeline
 - `design-docs/` - System design and architecture
 - `user-guide.md` - User manual and guides
-- `api-docs/` - API documentation (if applicable)
+- `api-docs.md` - API documentation (if applicable)
 - `meeting-notes/` - Meeting notes and minutes
 - `research/` - Research materials and references
 

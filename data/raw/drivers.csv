@@ -1,0 +1,11 @@
+driver_id,name,phone,email,license_number,experience_years,rating,current_location_lat,current_location_lng,availability_status,preferred_routes,vehicle_type
+D001,Rajesh Kumar,+91-9876543210,rajesh.kumar@email.com,DL1234567890,8,4.8,28.6139,77.2090,available,"Delhi-Mumbai;Delhi-Jaipur",truck
+D002,Amit Singh,+91-9876543211,amit.singh@email.com,MH1234567891,5,4.5,19.0760,72.8777,available,"Mumbai-Pune;Mumbai-Bangalore",truck
+D003,Suresh Patel,+91-9876543212,suresh.patel@email.com,GJ1234567892,12,4.9,23.0225,72.5714,busy,"Ahmedabad-Surat;Ahmedabad-Rajkot",truck
+D004,Vikram Sharma,+91-9876543213,vikram.sharma@email.com,RJ1234567893,6,4.6,26.9124,75.7873,available,"Jaipur-Delhi;Jaipur-Udaipur",truck
+D005,Manoj Yadav,+91-9876543214,manoj.yadav@email.com,UP1234567894,9,4.7,25.3176,82.9739,available,"Varanasi-Delhi;Varanasi-Kolkata",truck
+D006,Prakash Reddy,+91-9876543215,prakash.reddy@email.com,AP1234567895,7,4.4,17.3850,78.4867,available,"Hyderabad-Chennai;Hyderabad-Bangalore",truck
+D007,Ravi Choudhary,+91-9876543216,ravi.choudhary@email.com,PB1234567896,10,4.8,30.7333,76.7794,busy,"Chandigarh-Delhi;Chandigarh-Amritsar",truck
+D008,Deepak Gupta,+91-9876543217,deepak.gupta@email.com,HR1234567897,4,4.3,28.4595,77.0266,available,"Gurgaon-Delhi;Gurgaon-Jaipur",truck
+D009,Anil Joshi,+91-9876543218,anil.joshi@email.com,UK1234567898,11,4.9,30.0668,79.0193,available,"Dehradun-Delhi;Dehradun-Haridwar",truck
+D010,Santosh Kumar,+91-9876543219,santosh.kumar@email.com,BR1234567899,3,4.2,25.5941,85.1376,available,"Patna-Delhi;Patna-Kolkata",truck

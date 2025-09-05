@@ -2,7 +2,7 @@
 
 ## 🎯 Your Role: Backend Lead & AI/ML Specialist
 
-You'll be responsible for building the core backend system, AI agents, and WhatsApp integration that powers the entire logistics platform.
+You'll be responsible for building the FastAPI backend, implementing AI agents using LangChain, managing the database, and creating the WhatsApp bot integration.
 
 ---
 
@@ -221,94 +221,14 @@ Create routes for:
 ## 🔗 Week 3-4 Tasks - WhatsApp Integration
 
 ### Task 1: WhatsApp Webhook Handler
-Create `src/backend/whatsapp/bot_handler.py`:
-```python
-from fastapi import APIRouter, Request
-from .message_processor import process_whatsapp_message
-
-router = APIRouter()
-
-@router.post("/whatsapp/webhook")
-async def whatsapp_webhook(request: Request):
-    data = await request.json()
-    
-    # Extract message details
-    from_number = data.get("from")
-    message_text = data.get("body", "").upper().strip()
-    
-    # Process the message
-    response = await process_whatsapp_message(from_number, message_text)
-    
-    return {"status": "processed", "response": response}
-```
-
 ### Task 2: Message Processing Logic
-Create handlers for:
-- "FREE" / "AVAILABLE" - Mark driver as available
-- "BUSY" / "OCCUPIED" - Mark driver as busy  
-- "YES" - Accept trip offer
-- "NO" - Decline trip offer
-- "PICKED UP" - Update trip status
-- "DELIVERED" - Complete trip
-- "FUEL [AMOUNT]" - Log fuel expense
 
 ---
 
 ## 🧠 Week 5-6 Tasks - AI Agents Development
 
 ### Task 1: Availability Agent
-Create `src/backend/agents/availability_agent.py`:
-```python
-from langchain.agents import Agent
-from langchain.llms import HuggingFaceHub
-from ..database import get_db
-
-class AvailabilityAgent:
-    def __init__(self):
-        self.db = get_db()
-    
-    async def update_driver_availability(self, phone_number: str, status: str):
-        """
-        Updates driver availability based on WhatsApp message
-        """
-        # Logic to parse status and update database
-        pass
-    
-    async def get_available_drivers(self, location: str = None):
-        """
-        Returns list of available drivers, optionally filtered by location
-        """
-        pass
-```
-
 ### Task 2: Document Digitizer Agent
-Create `src/backend/agents/document_digitizer.py`:
-```python
-import pytesseract
-from PIL import Image
-import cv2
-import re
-
-class DocumentDigitizerAgent:
-    def __init__(self):
-        # Configure tesseract path if needed
-        pass
-    
-    async def extract_freight_amount(self, image_data: bytes):
-        """
-        Extract freight amount from receipt image using OCR
-        """
-        # Convert bytes to image
-        # Apply OCR
-        # Extract amount using regex
-        pass
-    
-    async def process_expense_receipt(self, image_data: bytes):
-        """
-        Process expense receipt and extract relevant information
-        """
-        pass
-```
 
 ---
 

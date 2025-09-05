@@ -2,7 +2,7 @@
 
 ## 🎯 Your Role: DevOps & Automation Specialist
 
-You'll be responsible for n8n workflow automation, system integration, testing coordination, deployment, and ensuring everything works together seamlessly.
+You'll be responsible for n8n workflow automation, system integration, deployment infrastructure, and coordinating the entire technology stack.
 
 ---
 
@@ -14,37 +14,29 @@ You'll be responsible for n8n workflow automation, system integration, testing c
 node --version
 npm --version
 
-# Install Docker Desktop
-# Download from docker.com and install
+# Install Docker Desktop from docker.com
+docker --version
+docker-compose --version
 
 # Install Git (if not already installed)
-# Download from git-scm.com
+git --version
 
-# Install VS Code
-# Download from code.visualstudio.com
+# Install VS Code with extensions:
+# - Docker
+# - YAML
+# - GitLens
 ```
 
-### Step 2: Install VS Code Extensions
-- Docker (Microsoft)
-- YAML (Red Hat)
-- REST Client (for API testing)
-- GitLens
-- Thunder Client
-- n8n Workflow Editor (if available)
-
-### Step 3: Setup n8n Environment
+### Step 2: Install n8n
 ```bash
 # Install n8n globally
 npm install n8n -g
 
-# Or use Docker (recommended for development)
+# OR use Docker (recommended for production)
 docker run -it --rm --name n8n -p 5678:5678 n8nio/n8n
 
-# Create n8n data directory
-mkdir n8n-data
-
-# Run n8n with persistent data
-docker run -it --rm --name n8n -p 5678:5678 -v n8n-data:/home/node/.n8n n8nio/n8n
+# OR use n8n cloud (easiest for getting started)
+# Sign up at https://n8n.cloud
 ```
 
 ---
@@ -107,6 +99,13 @@ Create `docs/development-setup.md`:
    JWT_SECRET_KEY=your_jwt_secret
    ```
 
+4. Start backend server:
+   ```bash
+   cd src/backend
+   python app/main.py
+   ```
+```
+
 ## Frontend Setup (Shashank)
 1. Navigate to frontend directory:
    ```bash
@@ -120,47 +119,52 @@ Create `docs/development-setup.md`:
    ```
 
 ## n8n Setup (Shivansh)
-1. Using Docker:
+1. Install n8n:
    ```bash
-   docker run -d --name n8n-instance -p 5678:5678 -v n8n-data:/home/node/.n8n n8nio/n8n
+   npm install n8n -g
    ```
 
-2. Access n8n at: http://localhost:5678
-```
+2. Start n8n:
+   ```bash
+   n8n start
+   ```
 
-### Task 2: Create Docker Development Environment
-Create `deployment/docker/docker-compose.dev.yml`:
+3. Access n8n interface:
+   ```
+   http://localhost:5678
+   ```
+
+### Task 2: Docker Development Environment
+Create `docker-compose.dev.yml`:
 ```yaml
 version: '3.8'
-
 services:
   backend:
     build:
-      context: ../../
-      dockerfile: deployment/docker/Dockerfile.backend
+      context: ./src/backend
+      dockerfile: Dockerfile.dev
     ports:
       - "8000:8000"
     environment:
-      - ENVIRONMENT=development
+      - DATABASE_URL=${DATABASE_URL}
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN}
     volumes:
-      - ../../src/backend:/app
+      - ./src/backend:/app
     depends_on:
       - postgres
-      - redis
 
   frontend:
     build:
-      context: ../../
-      dockerfile: deployment/docker/Dockerfile.frontend
+      context: ./src/frontend
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
-      - ../../src/frontend:/app
-    environment:
-      - REACT_APP_API_URL=http://localhost:8000
+      - ./src/frontend:/app
+      - /app/node_modules
 
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n
     ports:
       - "5678:5678"
     environment:
@@ -168,324 +172,198 @@ services:
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=password
     volumes:
-      - n8n_data:/home/node/.n8n
-      - ./automation/workflows:/home/node/.n8n/workflows
+      - ./src/automation:/home/node/.n8n
 
   postgres:
     image: postgres:13
     environment:
-      - POSTGRES_DB=logistics_db
-      - POSTGRES_USER=postgres
+      - POSTGRES_DB=logistics
+      - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:6-alpine
-    ports:
-      - "6379:6379"
-
 volumes:
-  n8n_data:
   postgres_data:
-```
-
-### Task 3: Setup Project Repository Structure
-Create `.gitignore` additions for your specific needs:
-```gitignore
-# n8n specific
-n8n-data/
-*.n8nworkflow.json
-
-# Docker
-.docker/
-docker-compose.override.yml
-
-# Environment specific
-.env.local
-.env.development
-.env.production
-
-# Logs
-logs/
-*.log
-
-# Testing
-coverage/
-test-results/
 ```
 
 ---
 
 ## 🤖 Week 2 Tasks - n8n Workflow Foundation
 
-### Task 1: Basic n8n Workflow for Driver Availability
-Create your first workflow: "Driver Availability Management"
+### Task 1: Basic Automation Workflows
+Create these initial workflows in n8n:
 
-**Workflow Steps:**
-1. **Webhook Trigger** - Receives WhatsApp messages
-2. **Code Node** - Parses message content
-3. **Condition Node** - Checks if message is availability update
-4. **Database Node** - Updates driver status in Supabase
-5. **WhatsApp Response** - Sends confirmation back to driver
+**1. Driver Status Monitor**
+- Trigger: Webhook from backend when driver status changes
+- Action: Update database and notify relevant parties
+- Integration: WhatsApp notifications to owner
 
-**n8n Workflow JSON Structure:**
-```json
-{
-  "name": "Driver Availability Management",
-  "nodes": [
-    {
-      "name": "WhatsApp Webhook",
-      "type": "n8n-nodes-base.webhook",
-      "position": [250, 300],
-      "parameters": {
-        "path": "whatsapp-driver",
-        "httpMethod": "POST"
-      }
-    },
-    {
-      "name": "Parse Message",
-      "type": "n8n-nodes-base.code",
-      "position": [450, 300],
-      "parameters": {
-        "code": "// Parse WhatsApp message\nconst message = $json.body.toUpperCase();\nconst phone = $json.from;\n\nlet status = null;\nif (message.includes('FREE') || message.includes('AVAILABLE')) {\n  status = 'available';\n} else if (message.includes('BUSY') || message.includes('OCCUPIED')) {\n  status = 'busy';\n}\n\nreturn {\n  phone: phone,\n  message: message,\n  status: status,\n  timestamp: new Date().toISOString()\n};"
-      }
-    }
-  ],
-  "connections": {
-    "WhatsApp Webhook": {
-      "main": [["Parse Message"]]
-    }
-  }
-}
-```
+**2. Trip Assignment Automation**
+- Trigger: New trip created
+- Logic: Find available drivers based on location and capacity
+- Action: Auto-assign driver and send notifications
 
-### Task 2: Setup Database Integration in n8n
-Configure Supabase connection in n8n:
-1. Create credential for Supabase
-2. Test database connection
-3. Create nodes for CRUD operations
+**3. Daily Reports Generator**
+- Trigger: Scheduled daily at 8:00 AM
+- Action: Generate daily summary report
+- Integration: Email to owners with trip summary
 
-### Task 3: Create Testing Workflow
-Build a workflow to test API endpoints automatically:
-```json
-{
-  "name": "API Health Check",
-  "nodes": [
-    {
-      "name": "Schedule Trigger",
-      "type": "n8n-nodes-base.cron",
-      "parameters": {
-        "triggerTimes": {
-          "item": [
-            {
-              "mode": "everyMinute"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Test Backend Health",
-      "type": "n8n-nodes-base.httpRequest",
-      "parameters": {
-        "url": "http://localhost:8000/health",
-        "method": "GET"
-      }
-    }
-  ]
-}
-```
+### Task 2: API Integration Setup
+Configure API connections in n8n:
+- Backend API authentication
+- WhatsApp Business API integration
+- Email service integration (SendGrid/Gmail)
+- Database connection for direct queries
 
 ---
 
 ## 🔗 Week 3-4 Tasks - Core Automation Workflows
 
-### Task 1: Trip Assignment Workflow
-Create "Automated Trip Assignment" workflow:
+### Task 1: Intelligent Trip Management
+Create advanced workflows for:
 
-**Process Flow:**
-1. New trip created in database (trigger)
-2. Find available drivers in area
-3. Send trip offer to drivers via WhatsApp
-4. Wait for driver response
-5. Assign trip to first driver who accepts
-6. Notify owner and update dashboard
-
-### Task 2: Document Processing Workflow
-Create "Document Digitization" workflow:
-
-**Process Flow:**
-1. Driver uploads receipt image via WhatsApp
-2. Save image to cloud storage
-3. Extract text using OCR (integrate with backend)
-4. Parse expense amount and category
-5. Update trip expenses in database
-6. Send confirmation to driver
-
-Example n8n code node for OCR integration:
-```javascript
-// OCR Integration Node
-const axios = require('axios');
-
-// Call backend OCR endpoint
-const response = await axios.post('http://localhost:8000/agents/document-digitizer', {
-  image_data: $json.image_base64,
-  trip_id: $json.trip_id
-});
-
-return {
-  extracted_text: response.data.text,
-  amount: response.data.amount,
-  category: response.data.category,
-  confidence: response.data.confidence
-};
-```
-
-### Task 3: Financial Reporting Workflow
-Create "Weekly Financial Report" workflow:
-
-**Process Flow:**
-1. Scheduled trigger (every Sunday)
-2. Query database for week's data
-3. Calculate profits, expenses, driver payments
-4. Generate Excel report
-5. Email report to owner
-6. Update dashboard metrics
-
----
-
-## 🧪 Week 5-6 Tasks - Testing & Quality Assurance
-
-### Task 1: API Testing Framework
-Create automated API tests using n8n:
-
-Create `testing/api-tests/test-workflows.json`:
+**Smart Trip Assignment:**
 ```json
 {
-  "name": "API Integration Tests",
+  "name": "Smart Trip Assignment",
   "nodes": [
     {
-      "name": "Test User Registration",
-      "type": "n8n-nodes-base.httpRequest",
       "parameters": {
-        "url": "http://localhost:8000/auth/register",
-        "method": "POST",
-        "body": {
-          "username": "testuser",
-          "email": "test@example.com",
-          "password": "testpass123"
-        }
-      }
+        "path": "/trip-created",
+        "httpMethod": "POST"
+      },
+      "name": "Trip Created Webhook",
+      "type": "n8n-nodes-base.webhook"
     },
     {
-      "name": "Validate Response",
-      "type": "n8n-nodes-base.code",
       "parameters": {
-        "code": "if ($json.status_code !== 201) {\n  throw new Error('Registration failed');\n}\nreturn $json;"
-      }
+        "operation": "executeQuery",
+        "query": "SELECT * FROM drivers WHERE is_available = true AND current_location = '{{ $json.pickup_location }}'"
+      },
+      "name": "Find Available Drivers",
+      "type": "n8n-nodes-base.postgres"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "{{ $json.driver_count }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "name": "Check Driver Availability",
+      "type": "n8n-nodes-base.if"
     }
   ]
 }
 ```
 
-### Task 2: Integration Testing Setup
-Create comprehensive integration tests:
+**Expense Processing Automation:**
+- OCR integration for receipt processing
+- Automatic expense categorization
+- Approval workflow routing
+- Integration with accounting systems
 
-1. **WhatsApp Message Flow Test:**
-   - Send test message → Verify database update → Check response
+### Task 2: WhatsApp Bot Integration
+Create comprehensive WhatsApp automation:
+- Message parsing and intent recognition
+- Automated responses for common queries
+- Trip status updates via WhatsApp
+- Driver availability management through chat
 
-2. **Trip Assignment Test:**
-   - Create trip → Verify driver notification → Test assignment
+---
 
-3. **Document Processing Test:**
-   - Upload test image → Verify OCR → Check expense creation
+## 🧪 Week 5-6 Tasks - Testing & Quality Assurance
 
-### Task 3: Performance Monitoring
-Setup monitoring workflows:
+### Task 1: Automated Testing Workflows
+Create testing automation in n8n:
 
-```javascript
-// Performance Monitoring Node
-const start = Date.now();
+**API Testing Workflow:**
+- Scheduled API health checks
+- Automated endpoint testing
+- Performance monitoring
+- Alert generation for failures
 
-// Test API response time
-const response = await $http.get('http://localhost:8000/api/v1/trips');
+**Data Validation Workflow:**
+- Daily data integrity checks
+- Cross-system data synchronization
+- Automated backup verification
+- Error reporting and resolution
 
-const responseTime = Date.now() - start;
-
-if (responseTime > 2000) {
-  // Send alert if response time > 2 seconds
-  await $http.post('http://localhost:8000/alerts', {
-    type: 'performance',
-    message: `API response time: ${responseTime}ms`,
-    severity: 'warning'
-  });
-}
-
-return {
-  endpoint: '/api/v1/trips',
-  response_time: responseTime,
-  status: response.status
-};
-```
+### Task 2: Monitoring & Alerting
+Set up comprehensive monitoring:
+- System performance monitoring
+- Database performance tracking
+- API response time monitoring
+- User activity analytics
 
 ---
 
 ## 🚀 Week 7-8 Tasks - Deployment & Production Setup
 
-### Task 1: Production Environment Setup
-Create `deployment/docker/docker-compose.prod.yml`:
+### Task 1: Production Deployment
+Create production deployment configuration:
+
+**Production Docker Compose:**
 ```yaml
 version: '3.8'
-
 services:
+  backend:
+    image: logistics-backend:latest
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+    restart: always
+    networks:
+      - logistics-network
+
+  frontend:
+    image: logistics-frontend:latest
+    restart: always
+    networks:
+      - logistics-network
+
   nginx:
     image: nginx:alpine
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./ssl:/etc/ssl
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
     depends_on:
       - backend
       - frontend
-
-  backend:
-    build:
-      context: ../../
-      dockerfile: deployment/docker/Dockerfile.backend.prod
-    environment:
-      - ENVIRONMENT=production
-      - DATABASE_URL=${DATABASE_URL}
-    depends_on:
-      - postgres
-      - redis
-
-  frontend:
-    build:
-      context: ../../
-      dockerfile: deployment/docker/Dockerfile.frontend.prod
-    environment:
-      - REACT_APP_API_URL=https://yourdomain.com/api
+    restart: always
+    networks:
+      - logistics-network
 
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n
     environment:
-      - N8N_HOST=yourdomain.com
-      - N8N_PORT=443
+      - NODE_ENV=production
       - N8N_PROTOCOL=https
-    volumes:
-      - n8n_data:/home/node/.n8n
+      - N8N_HOST=${N8N_HOST}
+    restart: always
+    networks:
+      - logistics-network
+
+networks:
+  logistics-network:
+    driver: bridge
 ```
 
-### Task 2: CI/CD Pipeline Setup
-Create `.github/workflows/deploy.yml`:
+### Task 2: CI/CD Pipeline
+Create GitHub Actions workflow:
 ```yaml
 name: Deploy to Production
-
 on:
   push:
     branches: [main]
@@ -495,11 +373,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run Tests
+      - name: Run tests
         run: |
-          # Run backend tests
+          # Backend tests
           cd src/backend && python -m pytest
-          # Run frontend tests
+          # Frontend tests
           cd src/frontend && npm test
 
   deploy:
@@ -507,50 +385,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to Server
+      - name: Deploy to server
         run: |
-          # Deploy using Docker Compose
-          docker-compose -f deployment/docker/docker-compose.prod.yml up -d
+          # Deploy logic here
 ```
 
 ---
 
 ## 📊 Monitoring & Maintenance
 
-### Task 1: System Monitoring
-Create monitoring dashboard workflows:
+### Performance Monitoring
+Set up monitoring for:
+- API response times
+- Database query performance
+- System resource usage
+- User activity patterns
 
-1. **System Health Monitor:**
-   - Check all services every 5 minutes
-   - Alert if any service is down
-   - Log performance metrics
-
-2. **Error Tracking:**
-   - Monitor API error rates
-   - Track failed workflows
-   - Send alerts for critical errors
-
-3. **Usage Analytics:**
-   - Track daily active users
-   - Monitor message volume
-   - Report system usage statistics
-
-### Task 2: Backup & Recovery
-Create automated backup workflows:
-
-```javascript
-// Database Backup Workflow
-const { exec } = require('child_process');
-
-// Create database backup
-exec('pg_dump logistics_db > backup_' + new Date().toISOString().split('T')[0] + '.sql', 
-  (error, stdout, stderr) => {
-    if (error) {
-      throw new Error('Backup failed: ' + error.message);
-    }
-    return { status: 'success', backup_file: 'backup_' + new Date().toISOString().split('T')[0] + '.sql' };
-  });
-```
+### Automated Maintenance
+Create workflows for:
+- Database backup automation
+- Log rotation and cleanup
+- Security updates
+- Performance optimization
 
 ---
 
@@ -575,29 +431,31 @@ exec('pg_dump logistics_db > backup_' + new Date().toISOString().split('T')[0] +
 **Week 1:**
 - [ ] Development environment documentation
 - [ ] Docker development setup
-- [ ] Git repository structure
-- [ ] Basic n8n instance running
+- [ ] n8n installation and basic configuration
+- [ ] Team coordination workflows
 
 **Week 2:**
-- [ ] First n8n workflow (driver availability)
-- [ ] Database integration in n8n
-- [ ] API health check automation
-- [ ] Testing framework setup
+- [ ] Basic automation workflows operational
+- [ ] API integrations configured
+- [ ] WhatsApp bot foundation ready
+- [ ] Daily reporting automation
 
 **Week 3:**
-- [ ] Trip assignment workflow
-- [ ] Document processing automation
-- [ ] WhatsApp integration testing
+- [ ] Smart trip assignment workflow
+- [ ] Expense processing automation
+- [ ] Advanced WhatsApp integrations
+- [ ] Performance monitoring setup
 
 **Week 4:**
-- [ ] Financial reporting automation
-- [ ] Performance monitoring setup
+- [ ] Comprehensive testing workflows
+- [ ] Data validation automation
+- [ ] Error handling and alerting
 - [ ] Integration testing complete
 
-**Week 5-6:**
-- [ ] Comprehensive test suite
-- [ ] Production environment setup
-- [ ] CI/CD pipeline
-- [ ] Monitoring and alerting
+**Week 5:**
+- [ ] Production deployment configuration
+- [ ] CI/CD pipeline operational
+- [ ] Security and backup systems
+- [ ] Documentation complete
 
-Remember: Your role is crucial for making sure all components work together seamlessly. Focus on automation, testing, and reliability!
+Remember: Focus on reliability and scalability. Your automation workflows are the backbone that connects all system components!

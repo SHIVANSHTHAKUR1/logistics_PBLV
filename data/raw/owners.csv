@@ -1,0 +1,11 @@
+owner_id,name,company_name,phone,email,address,gst_number,pan_number,bank_account,registration_date
+O001,Ramesh Agarwal,Agarwal Transport Pvt Ltd,+91-9876540001,ramesh@agarwaltransport.com,"123 Transport Nagar, Delhi",07AABCA1234C1Z5,AABCA1234C,123456789012,2020-03-15
+O002,Sunil Mehta,Mehta Logistics Solutions,+91-9876540002,sunil@mehtalogistics.com,"456 Industrial Area, Mumbai",27BBBCB2345D2Y6,BBBCB2345D,234567890123,2019-07-22
+O003,Prakash Shah,Shah Freight Services,+91-9876540003,prakash@shahfreight.com,"789 Commercial Complex, Ahmedabad",24CCCDC3456E3X7,CCCDC3456E,345678901234,2021-01-10
+O004,Dinesh Jain,Jain Transportation,+91-9876540004,dinesh@jaintransport.com,"321 Business Park, Jaipur",08DDDDD4567F4W8,DDDDD4567F,456789012345,2020-09-05
+O005,Mahesh Gupta,Gupta Cargo Movers,+91-9876540005,mahesh@guptacargo.com,"654 Logistics Hub, Varanasi",09EEEEE5678G5V9,EEEEE5678G,567890123456,2018-12-18
+O006,Ravi Reddy,Reddy Express Logistics,+91-9876540006,ravi@reddyexpress.com,"987 Transport Zone, Hyderabad",36FFFFF6789H6U0,FFFFF6789H,678901234567,2022-04-12
+O007,Harpreet Singh,Singh Roadways,+91-9876540007,harpreet@singhroad.com,"147 Highway Plaza, Chandigarh",03GGGGG7890I7T1,GGGGG7890I,789012345678,2019-11-25
+O008,Ajay Kumar,Kumar Fleet Services,+91-9876540008,ajay@kumarfleet.com,"258 Industrial Estate, Gurgaon",06HHHHH8901J8S2,HHHHH8901J,890123456789,2021-06-30
+O009,Naresh Joshi,Joshi Mountain Transport,+91-9876540009,naresh@joshimountain.com,"369 Hill Station Road, Dehradun",05IIIII9012K9R3,IIIII9012K,901234567890,2020-02-14
+O010,Ashok Kumar,Kumar Bihar Transport,+91-9876540010,ashok@kumarbihartrans.com,"741 Railway Station Road, Patna",10JJJJJ0123L0Q4,JJJJJ0123L,012345678901,2017-08-08

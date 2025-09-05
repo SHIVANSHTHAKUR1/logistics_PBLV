@@ -1,0 +1,13 @@
+expense_id,trip_id,driver_id,expense_type,amount_inr,description,receipt_number,expense_date,location,payment_method,approved_status
+E001,T001,D001,fuel,14800,Diesel refuel at HP Petrol Pump,HP001234,2025-01-15,Delhi,cash,approved
+E002,T001,D001,toll,850,Highway toll charges,TOLL001,2025-01-15,Delhi-Mumbai Highway,cash,approved
+E003,T001,D001,food,450,Driver meal expenses,REST001,2025-01-16,Madhya Pradesh,cash,approved
+E004,T002,D002,fuel,1750,Diesel refuel,BP002345,2025-01-16,Mumbai,cash,approved
+E005,T002,D002,parking,200,Parking charges,PARK001,2025-01-16,Pune,cash,approved
+E006,T003,D003,fuel,3200,Diesel refuel at Reliance,REL003456,2025-01-18,Ahmedabad,card,approved
+E007,T003,D003,maintenance,1500,Tire replacement,TIRE001,2025-01-18,Ahmedabad,cash,pending
+E008,T007,D008,fuel,2750,Diesel refuel,HP004567,2025-01-19,Gurgaon,cash,approved
+E009,T007,D008,toll,450,Highway toll,TOLL002,2025-01-19,Gurgaon-Jaipur Highway,cash,approved
+E010,T008,D009,fuel,2900,Diesel refuel,IO005678,2025-01-17,Dehradun,cash,approved
+E011,T008,D009,food,600,Driver accommodation,HOTEL001,2025-01-17,Delhi,cash,approved
+E012,T001,D001,miscellaneous,300,Vehicle cleaning,WASH001,2025-01-17,Mumbai,cash,approved

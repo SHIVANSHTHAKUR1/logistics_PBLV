@@ -111,24 +111,6 @@ const theme = createTheme({
       paper: '#ffffff',
     },
   },
-  typography: {
-    fontFamily: [
-      'Roboto',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-    h1: {
-      fontWeight: 500,
-      fontSize: '2.5rem',
-    },
-    h2: {
-      fontWeight: 500,
-      fontSize: '2rem',
-    },
-  },
   components: {
     MuiButton: {
       styleOverrides: {
@@ -682,12 +664,12 @@ function Drivers() {
             <Typography color="textSecondary">{driver.phone}</Typography>
           </Box>
           <Chip
-            label={driver.isAvailable ? 'Available' : 'Busy'}
-            color={driver.isAvailable ? 'success' : 'default'}
             icon={driver.isAvailable ? <CheckCircle /> : <Cancel />}
+            label={driver.isAvailable ? 'Available' : 'Busy'}
+            color={driver.isAvailable ? 'success' : 'error'}
+            variant="outlined"
           />
         </Box>
-        
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body2" color="textSecondary">
             License: {driver.licenseNumber}
@@ -796,7 +778,6 @@ export default useWebSocket;
 ```
 
 ### Task 3: Mobile Responsive Design
-Ensure all components work well on mobile devices using Material-UI's responsive features.
 
 ---
 
@@ -861,3 +842,99 @@ test('renders dashboard title', () => {
 - [ ] Integration with backend APIs
 
 Remember: Focus on user experience and make the interface intuitive for truck owners who may not be tech-savvy!
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none', // Remove uppercase transformation
+          borderRadius: 8,
+        },
+      },
+    },
+  },
+});
+
+export default theme;
+```
+
+### Task 2: Setup Routing
+- **Trip history**: Completed trips with analytics
+
+#### 3. Driver Management
+- **Driver profiles**: Ratings, experience, availability
+- **Performance analytics**: Trip completion rates, customer feedback
+- **AI matching**: Smart driver-trip assignment
+
+#### 4. Vehicle Management
+- **Fleet overview**: Vehicle status, maintenance schedules
+- **Fuel efficiency**: AI-powered fuel optimization insights
+- **Route history**: Vehicle utilization patterns
+
+#### 5. Analytics & Reports
+- **Financial dashboard**: Revenue, expenses, profit margins
+- **Performance metrics**: Driver efficiency, route optimization
+- **AI insights**: Predictive analytics, cost optimization
+
+#### 6. Document Management
+- **Receipt upload**: OCR processing for expense receipts
+- **Document viewer**: Processed receipts with extracted data
+- **AI categorization**: Automatic expense categorization
+
+### Development Phases
+
+#### Phase 4A: Core Setup (Days 1-2)
+- [ ] Initialize React project with Vite
+- [ ] Set up Material-UI theme and components
+- [ ] Configure Redux store and API services
+- [ ] Create basic routing and layout
+
+#### Phase 4B: Dashboard & Navigation (Days 3-4)
+- [ ] Build main dashboard with metrics
+- [ ] Implement navigation sidebar
+- [ ] Create responsive layout
+- [ ] Add real-time data integration
+
+#### Phase 4C: Trip Management (Days 5-6)
+- [ ] Trip creation form with AI route optimization
+- [ ] Trip listing and filtering
+- [ ] Trip details view with map integration
+- [ ] Real-time trip tracking
+
+#### Phase 4D: Analytics & AI Integration (Days 7-8)
+- [ ] Driver analytics dashboard
+- [ ] Financial reports and charts
+- [ ] AI insights and recommendations
+- [ ] Document upload and OCR integration
+
+#### Phase 4E: Testing & Polish (Days 9-10)
+- [ ] Component testing
+- [ ] Integration testing with backend
+- [ ] UI/UX improvements
+- [ ] Performance optimization
+
+### API Integration Points
+- **Base URL**: http://localhost:8000
+- **Authentication**: JWT tokens
+- **Real-time**: WebSocket connections for live updates
+- **File Upload**: Multipart forms for document upload
+
+### Next Steps
+1. Initialize React project structure
+2. Set up development environment
+3. Create core components and routing
+4. Integrate with AI-powered backend APIs
+
+## Getting Started
+Run the following commands to start frontend development:
+
+```bash
+cd src/frontend
+npm create vite@latest . -- --template react
+npm install
+npm install @mui/material @emotion/react @emotion/styled
+npm install @reduxjs/toolkit react-redux
+npm install axios react-router-dom
+npm install recharts @mui/icons-material
+npm run dev
+```

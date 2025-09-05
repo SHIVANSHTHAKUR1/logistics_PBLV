@@ -1,0 +1,11 @@
+vehicle_id,registration_number,vehicle_type,capacity_tons,fuel_type,mileage_kmpl,owner_id,driver_id,current_location_lat,current_location_lng,status,last_maintenance_date
+V001,DL01AB1234,truck,10,diesel,8.5,O001,D001,28.6139,77.2090,active,2024-12-15
+V002,MH02CD5678,truck,15,diesel,7.2,O002,D002,19.0760,72.8777,active,2024-12-10
+V003,GJ03EF9012,truck,20,diesel,6.8,O003,D003,23.0225,72.5714,active,2024-12-20
+V004,RJ04GH3456,truck,12,diesel,8.0,O004,D004,26.9124,75.7873,active,2024-12-18
+V005,UP05IJ7890,truck,8,diesel,9.0,O005,D005,25.3176,82.9739,active,2024-12-12
+V006,AP06KL2345,truck,18,diesel,7.5,O006,D006,17.3850,78.4867,active,2024-12-14
+V007,PB07MN6789,truck,14,diesel,7.8,O007,D007,30.7333,76.7794,maintenance,2024-12-22
+V008,HR08OP0123,truck,16,diesel,7.0,O008,D008,28.4595,77.0266,active,2024-12-16
+V009,UK09QR4567,truck,11,diesel,8.2,O009,D009,30.0668,79.0193,active,2024-12-13
+V010,BR10ST8901,truck,9,diesel,8.8,O010,D010,25.5941,85.1376,active,2024-12-11
